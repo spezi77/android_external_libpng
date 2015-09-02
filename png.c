@@ -1670,7 +1670,6 @@ png_colorspace_set_chromaticities(png_const_structrp png_ptr,
           * values.  Likely as not a color management system will fail too.
           */
          colorspace->flags |= PNG_COLORSPACE_INVALID;
-         png_benign_error(png_ptr, "invalid chromaticities");
          break;
 
       default:
@@ -1678,7 +1677,6 @@ png_colorspace_set_chromaticities(png_const_structrp png_ptr,
           * want error reports so for the moment it is an error.
           */
          colorspace->flags |= PNG_COLORSPACE_INVALID;
-         png_error(png_ptr, "internal error checking chromaticities");
          break;
    }
 
@@ -2005,19 +2003,16 @@ png_icc_check_header(png_const_structrp png_ptr, png_colorspacerp colorspace,
    {
       case 0x52474220: /* 'RGB ' */
          if (!(color_type & PNG_COLOR_MASK_COLOR))
-            return png_icc_profile_error(png_ptr, colorspace, name, temp,
-               "RGB color space not permitted on grayscale PNG");
+         return;
          break;
 
       case 0x47524159: /* 'GRAY' */
          if (color_type & PNG_COLOR_MASK_COLOR)
-            return png_icc_profile_error(png_ptr, colorspace, name, temp,
-               "Gray color space not permitted on RGB PNG");
+         return;
          break;
 
       default:
-         return png_icc_profile_error(png_ptr, colorspace, name, temp,
-            "invalid ICC profile color space");
+         return;
    }
 
    /* It is up to the application to check that the profile class matches the
