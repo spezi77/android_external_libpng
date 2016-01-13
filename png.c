@@ -2003,16 +2003,19 @@ png_icc_check_header(png_const_structrp png_ptr, png_colorspacerp colorspace,
    {
       case 0x52474220: /* 'RGB ' */
          if (!(color_type & PNG_COLOR_MASK_COLOR))
-         return;
+            return png_icc_profile_error(png_ptr, colorspace, name, temp,
+               "RGB color space not permitted on grayscale PNG");
          break;
 
       case 0x47524159: /* 'GRAY' */
          if (color_type & PNG_COLOR_MASK_COLOR)
-         return;
+            return png_icc_profile_error(png_ptr, colorspace, name, temp,
+               "Gray color space not permitted on RGB PNG");
          break;
 
       default:
-         return;
+         return png_icc_profile_error(png_ptr, colorspace, name, temp,
+            "invalid ICC profile color space");
    }
 
    /* It is up to the application to check that the profile class matches the
